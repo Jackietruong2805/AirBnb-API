@@ -75,6 +75,23 @@ const updatePhong = async (req, res) =>{
     }
 }
 
+const deletePhong = async (req, res) =>{
+    try{
+        const {id} = req.params;
+        const checkPhong = await prisma.Phong.findFirst({where: {id_phong: +id}});
+        if(checkPhong){
+            const result = await prisma.Phong.delete({where: {id_phong: +id}});
+            successCode(res, result, "Xóa thông tin thành công");
+        }else{
+            failCode(res, checkPhong, "không tồn tại id: " + id);
+        }
+    }catch(err){
+        errorCode(res, err, "Lỗi backend");
+    }
+}
 
 
-module.exports = { getPhong, createPhong, getPhongByVitri, getPhongById, updatePhong};
+
+
+
+module.exports = { getPhong, createPhong, getPhongByVitri, getPhongById, updatePhong, deletePhong};
