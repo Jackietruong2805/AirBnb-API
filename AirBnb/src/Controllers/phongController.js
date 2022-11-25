@@ -46,7 +46,7 @@ const getPhongByVitri = async (req, res) =>{
 const getPhongById = async (req, res) =>{
     try{
         const {id} = req.params;
-        const result = await prisma.Phong.findFirst({where: {id_phong: +id}})
+        const result = await prisma.Phong.findFirst({where: {id_phong: +id}});
         if(result){
             successCode(res, result, "Lấy thông tin thành công");
         }else{
