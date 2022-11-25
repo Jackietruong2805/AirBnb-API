@@ -5,8 +5,11 @@ const { successCode, failCode, errorCode } = require("../ultis/response");
 const getPhong = async (req, res) => {
     try {
         const result = await prisma.Phong.findMany();
-
-        successCode(res, result, "Lấy thông tin thành công");
+        if(result){
+            successCode(res, result, "Lấy thông tin thành công");
+        }else{
+            failCode(res, result, "Không có phòng nào tồn tại");
+        }
     } catch (err) {
         errorCode(res, err, "Lỗi backend");
     }
@@ -15,15 +18,12 @@ const getPhong = async (req, res) => {
 const createPhong = async (req, res) => {
     try {
         const data = req.body;
-        const {id_phong} = req.body;
-        const checkPhong = await prisma.Phong.findMany({where: {id_phong}})
-        if(checkPhong){
-            failCode(res, !checkPhong, "Phòng đã tồn tại");
-        }else{
-            const result = await prisma.Phong.create({data});
+        const result = await prisma.Phong.create({data});
+        if(result){
             successCode(res, result, "Thêm Phòng Thành công");
+        }else{
+            failCode(res, result, "Thêm phòng thất bại");
         }
-
     } catch (err) {
         errorCode(res, err, "Lỗi backend");
      }
@@ -32,12 +32,14 @@ const createPhong = async (req, res) => {
 const getPhongByVitri = async (req, res) =>{
     try{
         const {id_vitri} = req.body;
-        const result = await prisma.Phong.findMany({where: {id_vitri}})
-        successCode(res, result, "Lấy thông tin  thành công");
-        
+        const result = await prisma.Phong.findMany({where: {id_vitri}});
+        if(result){
+            successCode(res, result, "Lấy thông tin  thành công");
+        }else{
+            failCode(res, result, "Phòng không tồn tại");
+        }
     }catch(err){
         errorCode(res, err, "Lỗi backend");
-
     }
 }
 
@@ -45,7 +47,11 @@ const getPhongById = async (req, res) =>{
     try{
         const {id} = req.params;
         const result = await prisma.Phong.findFirst({where: {id_phong: +id}})
-        successCode(res, result, "Lấy thông tin thành công");
+        if(result){
+            successCode(res, result, "Lấy thông tin thành công");
+        }else{
+            failCode(res, result, "Phòng không tồn tại");
+        }
     }catch(err){
         errorCode(res, err, "Lỗi backend");
 
@@ -55,20 +61,17 @@ const getPhongById = async (req, res) =>{
 const updatePhong = async (req, res) =>{
     try{
         const {id} = req.params;
-        const {ten_phong, khach, phong_ngu, giuong, phong_tam, mo_ta, gia_tien, may_giat, ban_la, tivi, dieu_hoa, wifi, bep, do_xe, ho_boi, ban_ui, hinh_anh, id_vitri} = req.body;
+        const data = req.body;
         const checkPhong = await prisma.Phong.findFirst({where: {id_phong: +id}});
         if(checkPhong){
-            const result = await prisma.Phong.update({
-                where: {
-                    id_phong: +id
-                },
-                data: {
-                    ten_phong, khach, phong_ngu, giuong, phong_tam, mo_ta, gia_tien, may_giat, ban_la, tivi, dieu_hoa, wifi, bep, do_xe, ho_boi, ban_ui, hinh_anh, id_vitri
-            }});
-
-            successCode(res, result, "Cập nhật thông tin thành công");
-        } else{
-            failCode(res, checkPhong, "Phòng không tồn tại");
+            const result = await prisma.Phong.update({data, where: {id_phong: +id}});
+            if(result){
+                successCode(res, result, "Cập nhật phòng thành công");
+            }else{
+                failCode(res, result, "Cập nhật phòng thất bại");
+            }
+        }else{
+            failCode(res, checkPhong, "Phòng có id: " + id + " không tồn tại");
         }
     }catch(err){
         errorCode(res, err, "Lỗi backend");
@@ -81,17 +84,18 @@ const deletePhong = async (req, res) =>{
         const checkPhong = await prisma.Phong.findFirst({where: {id_phong: +id}});
         if(checkPhong){
             const result = await prisma.Phong.delete({where: {id_phong: +id}});
-            successCode(res, result, "Xóa thông tin thành công");
+            if(result){
+                successCode(res, result, "Xóa phòng thành công");
+            }else{
+                failCode(res, result, "Xóa phòng thất bại");
+            }
         }else{
-            failCode(res, checkPhong, "không tồn tại id: " + id);
+            failCode(res, checkPhong, "không tồn tại phòng có id: " + id);
         }
     }catch(err){
         errorCode(res, err, "Lỗi backend");
     }
 }
-
-
-
 
 
 module.exports = { getPhong, createPhong, getPhongByVitri, getPhongById, updatePhong, deletePhong};

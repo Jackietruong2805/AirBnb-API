@@ -5,11 +5,81 @@ const { successCode, failCode, errorCode } = require("../ultis/response");
 const getviTri = async (req, res) =>{
     try{
         const result = await prisma.ViTri.findMany();
-        successCode(res, result, "Lấy thông tin thành công");
+        if(result){
+            successCode(res, result, "Lấy thông tin thành công");
+        }else{
+            failCode(res, result, "Phòng không tồn tại");
+        }
     }catch(err){
         errorCode(res, err, "Lỗi backend");
     }
 }
 
+const createVitri = async (req, res) => {
+    try {
+        const data = req.body;
+        const result = await prisma.ViTri.create({data});
+        if(result){
+            successCode(res, result, "Thêm Vị trí Thành công");
+        }else{
+            failCode(res, result, "Thêm vị trí thất bại");
+        }
+    } catch (err) {
+        errorCode(res, err, "Lỗi backend");
+     }
+};
 
-module.exports = {getviTri}
+const getVitriById = async (req, res) => {
+    try{
+        const {id} = req.params;
+        const result = await prisma.ViTri.findFirst({where: {id_vitri: +id}});
+        if(result){
+            successCode(res, result, "Lấy vị trí thành công");
+        }else{
+            failCode(res, result, "Lấy vị trí thất bại");
+        }
+    }catch(err){
+        errorCode(res, err, "Lỗi backend");
+    }
+}
+
+const updateVitri = async (req, res) =>{
+    try{
+        const {id} = req.params;
+        const data = req.body;
+        const checkVitri = await prisma.ViTri.findFirst({where: {id_vitri: +id}});
+        if(checkVitri){
+            const result = await prisma.ViTri.update({data, where: {id_vitri: +id}});
+            if(result){
+                successCode(res, result, "Cập nhật vị trí thành công");
+            }else{
+                failCode(res, result, "Cập nhật vị trí thất bại");
+            }
+        }else{
+            failCode(res, checkVitri, "Vị trí có id: " + id + " không tồn tại");
+        } 
+    }catch(err){
+        errorCode(res, err, "Lỗi backend");
+    }
+}
+
+const deleteVitri = async (req, res) => {
+    try{
+        const {id} = req.params;
+        const checkVitri = await prisma.ViTri.findFirst({where: {id_vitri: +id}});
+        if(checkVitri){
+            const result = await prisma.ViTri.delete({where: {id_vitri: +id}});
+            if(result){
+                successCode(res, result, "Xóa vị trí thành công");
+            }else{
+                failCode(res, result, "Xóa vị trí thất bại");
+            }   
+        }else{
+            failCode(res, checkVitri, "Không tồn tại vị trí có id: " + id); 
+        }
+    }catch(err){
+        errorCode(res, err, "Lỗi backend");
+    }
+}
+
+module.exports = {getviTri, createVitri, getVitriById, updateVitri, deleteVitri}
