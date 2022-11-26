@@ -82,4 +82,8 @@ const deleteVitri = async (req, res) => {
     }
 }
 
+
+
+
+ 
 module.exports = {getviTri, createVitri, getVitriById, updateVitri, deleteVitri}
