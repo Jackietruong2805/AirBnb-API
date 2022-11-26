@@ -15,7 +15,7 @@ const getUsers = async (req, res) => {
     }
 };
 
-const createUsers = async (req, res) =>{
+const createUser = async (req, res) =>{
     try{
         const data = req.body;
         const {email, phone} = data;
@@ -85,4 +85,4 @@ const updateUser = async (req, res) =>{
     }
 }
 
-module.exports = {getUsers, createUsers, getUserById, updateUser}
+module.exports = {getUsers, createUser, getUserById, updateUser}
