@@ -85,4 +85,20 @@ const updateUser = async (req, res) =>{
     }
 }
 
-module.exports = {getUsers, createUser, getUserById, updateUser}
+const deleteUser = async (req, res) =>{
+    try{
+        const {id} = req.params;
+        const checkUser = await prisma.Nguoidung.findFirst({where: {id_nguoidung: +id}});
+        if(checkUser){
+            const result = await prisma.NguoiDung.delete({where: {id_nguoidung: +id}});
+            successCode(res, result, "Xóa user thành công");
+        }else{
+            failCode(res, result, "Xóa user thất bại");
+        }
+    }catch(err){
+        errorCode(res, err, "Lỗi backend");
+    }
+}
+
+
+module.exports = {getUsers, createUser, getUserById, updateUser, deleteUser}
