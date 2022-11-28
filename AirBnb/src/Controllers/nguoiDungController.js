@@ -1,6 +1,6 @@
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
-const { successCode, failCode, errorCode } = require("../ultis/response");
+const { successCode, failCode, errorCode, createSuccessCode } = require("../ultis/response");
 
 const getUsers = async (req, res) => {
     try{
@@ -25,7 +25,7 @@ const createUser = async (req, res) =>{
             if(!checkPhone){
                 const result = await prisma.NguoiDung.create({data});
                 if(result){
-                    successCode(res, result, "Thêm user thành công");
+                    createSuccessCode(res, result, "Thêm user thành công");
                 }else{
                     failCode(res, result, "thêm user thất bại");
                 }

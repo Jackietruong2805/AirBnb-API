@@ -1,6 +1,6 @@
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
-const { successCode, failCode, errorCode } = require("../ultis/response");
+const { successCode, failCode, errorCode, createSuccessCode } = require("../ultis/response");
 
 const getviTri = async (req, res) =>{
     try{
@@ -20,7 +20,7 @@ const createVitri = async (req, res) => {
         const data = req.body;
         const result = await prisma.ViTri.create({data});
         if(result){
-            successCode(res, result, "Thêm Vị trí Thành công");
+            createSuccessCode(res, result, "Thêm Vị trí Thành công");
         }else{
             failCode(res, result, "Thêm vị trí thất bại");
         }

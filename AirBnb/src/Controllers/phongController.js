@@ -1,6 +1,6 @@
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
-const { successCode, failCode, errorCode } = require("../ultis/response");
+const { successCode, failCode, errorCode, createSuccessCode } = require("../ultis/response");
 
 const getPhong = async (req, res) => {
     try {
@@ -20,7 +20,7 @@ const createPhong = async (req, res) => {
         const data = req.body;
         const result = await prisma.Phong.create({data});
         if(result){
-            successCode(res, result, "Thêm Phòng Thành công");
+            createSuccessCode(res, result, "Thêm Phòng Thành công");
         }else{
             failCode(res, result, "Thêm phòng thất bại");
         }
