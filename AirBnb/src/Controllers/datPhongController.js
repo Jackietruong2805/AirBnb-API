@@ -33,7 +33,6 @@ const createDatPhong = async (req, res) =>{
     try{
         let data = req.body;
         const {id_nguoidung, id_phong, ngay_den, ngay_di} = data;
-        console.log(id_nguoidung, id_phong);
         ngayDenFormat = new Date(ngay_den);
         ngayDiFormat = new Date(ngay_di);
         data = {...data, ngay_den: ngayDenFormat, ngay_di: ngayDiFormat};
@@ -59,4 +58,18 @@ const createDatPhong = async (req, res) =>{
     }
 }
 
-module.exports = {getDatPhong, createDatPhong, getDatPhongById}
+const getDatPhongByUserId = async (req, res) =>{
+    try{
+        const {userId} = req.params;
+        const result = await prisma.DatPhong.findFirst({where: {id_nguoidung: +userId}});
+        if(result){
+            successCode(res, result, "Lấy user có id: " + userId + " thành công");
+        }else{  
+            failCode(res, result, "Không tồn tại user có id: " +userId);
+        }
+    }catch(err){
+        errorCode(res, err, "Lỗi backend");
+    } 
+}
+
+module.exports = {getDatPhong, createDatPhong, getDatPhongById, getDatPhongByUserId}

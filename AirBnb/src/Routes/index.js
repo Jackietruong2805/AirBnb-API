@@ -4,11 +4,13 @@ const phongRoute = require('./phongRoute');
 const viTriRoute = require('./viTriRoute');
 const nguoiDungRoute = require('./nguoiDungRoute');
 const datPhongRoute = require('./datPhongRoute');
+const binhLuanRoute = require('./binhLuanRoute');
 
 rootRoutes.use(phongRoute);
 rootRoutes.use(viTriRoute);
 rootRoutes.use(nguoiDungRoute);
 rootRoutes.use(datPhongRoute);
+rootRoutes.use(binhLuanRoute);
 
 
 

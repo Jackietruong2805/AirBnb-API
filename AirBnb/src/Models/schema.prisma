@@ -1,5 +1,6 @@
 generator client {
   provider = "prisma-client-js"
+  previewFeatures = ["fullTextSearch", "fullTextIndex"]
 }
 
 datasource db {
@@ -45,6 +46,7 @@ model NguoiDung {
   role         String?    @db.VarChar(50)
   BinhLuan     BinhLuan[]
   DatPhong     DatPhong[]
+
 }
 
 model Phong {
