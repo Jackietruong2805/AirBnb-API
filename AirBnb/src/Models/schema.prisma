@@ -11,7 +11,7 @@ datasource db {
 model BinhLuan {
   id_nguoidung   Int
   id_phong       Int
-  ngay_binh_luan DateTime  @db.DateTime(0)
+  ngay_binh_luan String    @db.VarChar(255)
   noi_dung       String?   @db.VarChar(255)
   sao_binh_luan  Int?
   NguoiDung      NguoiDung @relation(fields: [id_nguoidung], references: [id_nguoidung], onDelete: NoAction, onUpdate: NoAction, map: "BinhLuan_ibfk_1")
@@ -68,9 +68,9 @@ model Phong {
   ban_ui    Boolean?
   hinh_anh  String?    @db.VarChar(500)
   id_vitri  Int?
-  ViTri     ViTri?     @relation(fields: [id_vitri], references: [id_vitri], onDelete: NoAction, onUpdate: NoAction, map: "Phong_ibfk_1")
   BinhLuan  BinhLuan[]
   DatPhong  DatPhong[]
+  ViTri     ViTri?     @relation(fields: [id_vitri], references: [id_vitri], onDelete: NoAction, onUpdate: NoAction, map: "Phong_ibfk_1")
 
   @@index([id_vitri], map: "id_vitri")
 }
