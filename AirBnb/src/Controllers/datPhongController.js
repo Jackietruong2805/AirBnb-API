@@ -15,6 +15,21 @@ const getDatPhong = async (req, res) =>{
     }
 }
 
+
+const getDatPhongByUserId = async (req, res) =>{
+    try{
+        const {userId} = req.params;
+        const result = await prisma.DatPhong.findFirst({where: {id_nguoidung: +userId}});
+        if(result){
+            successCode(res, result, "Lấy user có id: " + userId + " thành công");
+        }else{  
+            failCode(res, result, "Không tồn tại user có id: " +userId);
+        }
+    }catch(err){
+        errorCode(res, err, "Lỗi backend");
+    } 
+}
+
 const getDatPhongById = async (req, res) =>{
     try{
         const {id_nguoidung, id_phong} = req.params;
@@ -58,18 +73,35 @@ const createDatPhong = async (req, res) =>{
     }
 }
 
-const getDatPhongByUserId = async (req, res) =>{
+
+
+const updateDatPhong = async (req, res) =>{
     try{
-        const {userId} = req.params;
-        const result = await prisma.DatPhong.findFirst({where: {id_nguoidung: +userId}});
-        if(result){
-            successCode(res, result, "Lấy user có id: " + userId + " thành công");
-        }else{  
-            failCode(res, result, "Không tồn tại user có id: " +userId);
+        const {id} = req.params;
+        let data = req.body;
+        let {id_nguoidung, id_phong, ngay_den, ngay_di} = data;
+        data = {...data, ngay_di: new Date(ngay_di), ngay_den: new Date(ngay_den)};
+        const isPhongExist = await prisma.Phong.findFirst({where: {id_phong: +id}});
+        const isDatPhongExist = await prisma.DatPhong.findFirst({where: {id_nguoidung: +id_nguoidung, id_phong: +id_phong}});
+        if(isPhongExist){
+            if(isDatPhongExist){
+                const result = await prisma.DatPhong.update({where: {
+                    id_nguoidung_id_phong:{
+                        id_phong: +id_phong, 
+                        id_nguoidung: +id_nguoidung
+                    }
+                }, data});
+                successCode(res, result, "Cập nhật đặt phòng thành công");
+            }else{
+                failCode(res, isDatPhongExist, "Đặt phòng không tồn tại");
+            }        
+        }else{
+            failCode(res, isPhongExist, "Phòng không tồn tại");
         }
     }catch(err){
         errorCode(res, err, "Lỗi backend");
-    } 
+    }
 }
 
-module.exports = {getDatPhong, createDatPhong, getDatPhongById, getDatPhongByUserId}
+
+module.exports = {getDatPhong, createDatPhong, getDatPhongById, getDatPhongByUserId, updateDatPhong}
