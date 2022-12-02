@@ -103,5 +103,27 @@ const updateDatPhong = async (req, res) =>{
     }
 }
 
+const deleteDatPhong = async (req, res) =>{
+    try{
+        const {userId, roomId} = req.params;
+        const isDatPhongExist = await prisma.DatPhong.findFirst({where: {
+            id_nguoidung: +userId,
+            id_phong: +roomId
+        }});
+        if(isDatPhongExist){
+            const result = await prisma.DatPhong.delete({where: {
+                id_nguoidung_id_phong: {
+                    id_nguoidung: +userId, 
+                    id_phong: +roomId
+                }
+            }});
+            successCode(res, result, "Xóa đặt phòng thành công");
+        }else{
+            failCode(res, isDatPhongExist, "Đặt phòng này không tồn tại");
+        }
+    }catch(err){
+        errorCode(res, err, "Lỗi backend");
+    }
+}
 
-module.exports = {getDatPhong, createDatPhong, getDatPhongById, getDatPhongByUserId, updateDatPhong}
+module.exports = {getDatPhong, createDatPhong, getDatPhongById, getDatPhongByUserId, updateDatPhong, deleteDatPhong}

@@ -31,10 +31,10 @@ const createPhong = async (req, res) => {
 
 const getPhongByVitri = async (req, res) =>{
     try{
-        const {id_vitri} = req.body;
-        const result = await prisma.Phong.findMany({where: {id_vitri}});
+        const {locationId} = req.query;
+        const result = await prisma.Phong.findMany({where: {id_vitri: +locationId}});
         if(result){
-            successCode(res, result, "Lấy thông tin  thành công");
+            successCode(res, result, "Lấy thông tin thành công");
         }else{
             failCode(res, result, "Phòng không tồn tại");
         }
