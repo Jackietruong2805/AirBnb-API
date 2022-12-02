@@ -113,5 +113,17 @@ const searchUserName = async (req, res) =>{
     } 
 }
 
+const uploadUserAvatar = async(req, res) =>{
+    try{
+        const fs = require("fs");
+        fs.readFile(process.cwd() + "/" + req.file.path, (err, data) => {
+            let fileName = `"data:${req.file.mimetype};base64,${Buffer.from(data).toString("base64")}"`;
+            fs.unlinkSync(process.cwd() + "/" + req.file.path);
+            res.send(fileName);
+          })
+    }catch(err){
+        errorCode(res, err, "Lỗi backend");
+    }
+}
 
-module.exports = {getUsers, createUser, getUserById, updateUser, deleteUser, searchUserName}
+module.exports = {getUsers, createUser, getUserById, updateUser, deleteUser, searchUserName, uploadUserAvatar}

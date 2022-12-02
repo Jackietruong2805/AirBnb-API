@@ -97,5 +97,18 @@ const deletePhong = async (req, res) =>{
     }
 }
 
+const uploadPhongImg = (req, res) =>{
+    try{
+        const fs = require("fs");
+        fs.readFile(process.cwd() + "/" + req.file.path, (err, data) => {
+            let fileName = `"data:${req.file.mimetype};base64,${Buffer.from(data).toString("base64")}"`;
+            fs.unlinkSync(process.cwd() + "/" + req.file.path);
+            res.send(fileName);
+          })
+    }catch(err){
+        errorCode(res, err, "Lỗi backend");
+    }
+}
 
-module.exports = { getPhong, createPhong, getPhongByVitri, getPhongById, updatePhong, deletePhong};
+
+module.exports = { getPhong, createPhong, getPhongByVitri, getPhongById, updatePhong, deletePhong, uploadPhongImg};
