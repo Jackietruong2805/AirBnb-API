@@ -5,7 +5,9 @@ const viTriRoute = require('./viTriRoute');
 const nguoiDungRoute = require('./nguoiDungRoute');
 const datPhongRoute = require('./datPhongRoute');
 const binhLuanRoute = require('./binhLuanRoute');
+const authRoute = require('./authRoute');
 
+rootRoutes.use(authRoute);
 rootRoutes.use(phongRoute);
 rootRoutes.use(viTriRoute);
 rootRoutes.use(nguoiDungRoute);
