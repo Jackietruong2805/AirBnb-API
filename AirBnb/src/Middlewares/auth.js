@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 
 // mã hóa dữ liệu thành token
 const encodeToken = (data) =>{
-    const token = jwt.sign({data}, "AirBnb", {expiresIn: "120s"});
+    const token = jwt.sign({data}, "AirBnb", {expiresIn: "1200s"});
     return token;
 }
 

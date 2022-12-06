@@ -85,12 +85,14 @@ const updateBinhLuan = async (req, res) =>{
 const deleteBinhLuan = async (req, res) =>{
     try{
         const {userId, roomId} = req.params;
+        const {ngay_binh_luan} = req.body;
         const isUserExist = await prisma.BinhLuan.findFirst({where: {id_nguoidung: +userId, id_phong: +roomId}});
         if(isUserExist){
             const result = await prisma.BinhLuan.delete({where: {
-                id_nguoidung_id_phong: {
+                id_nguoidung_id_phong_ngay_binh_luan: {
                     id_nguoidung: +userId,
-                    id_phong: +roomId   
+                    id_phong: +roomId,
+                    ngay_binh_luan   
                 }
             }})
             successCode(res, result, "Xóa bình luận của user có id: " +userId + " ở phòng có id: " + roomId);

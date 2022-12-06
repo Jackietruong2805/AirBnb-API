@@ -20,10 +20,15 @@ const errorCode = (res, err, message)=>{
     res.status(500).send("Lỗi: " + err, message)
 }
 
+const failToken = (res, message) =>{
+    res.status(401).send(message);
+}
+
 
 module.exports = {
     successCode,
     failCode,
     errorCode,
-    createSuccessCode
+    createSuccessCode,
+    failToken
 }
