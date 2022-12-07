@@ -95,6 +95,29 @@ const uploadVitriImg = (req, res) =>{
     }
 }
 
+const paginationviTri = async (req, res) => {
+    try{
+        const {pageSize, pageIndex, keyword} = req.query;
+
+        const result = await prisma.ViTri.findMany({
+            skip: +pageIndex*+pageSize - +pageSize,
+            take: +pageSize,
+            where: {
+                ten_vi_tri: {
+                    contains: keyword
+                }
+            }
+        })
+        if(result){
+            successCode(res, result, "Lấy vị trí thành công");
+        }else{
+            failCode(res, result, "Lấy vị trí thất bại");
+        }
+    }catch(err){
+        errorCode(res, err, "Lỗi");
+    }
+}
+
 
  
-module.exports = {getviTri, createVitri, getVitriById, updateVitri, deleteVitri, uploadVitriImg}
+module.exports = {getviTri, createVitri, getVitriById, updateVitri, deleteVitri, uploadVitriImg, paginationviTri}

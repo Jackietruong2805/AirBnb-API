@@ -110,5 +110,27 @@ const uploadPhongImg = (req, res) =>{
     }
 }
 
+const paginationPhong = async (req, res) =>{
+    try{
+        const {pageSize, pageIndex, keyword} = req.query;
+        const result = await prisma.Phong.findMany({
+            skip: +pageSize*+pageIndex - +pageSize,
+            take: +pageSize,
+            where: {
+                ten_phong: {
+                    contains: keyword
+                }
+            }
+        });
+        if(result){
+            successCode(res, result, "Lấy phòng thành công");
+        }else{
+            failCode(res, result, "Lấy phòng thất bại");
+        }   
+    }catch(err){
+        errorCode(res, err, "Lỗi backend");
+    }
+}
 
-module.exports = { getPhong, createPhong, getPhongByVitri, getPhongById, updatePhong, deletePhong, uploadPhongImg};
+
+module.exports = { getPhong, createPhong, getPhongByVitri, getPhongById, updatePhong, deletePhong, uploadPhongImg, paginationPhong};

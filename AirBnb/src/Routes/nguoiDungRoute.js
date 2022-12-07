@@ -1,10 +1,11 @@
 const express = require('express');
 const nguoiDungRoute = express.Router();
-const {getUsers, createUser, getUserById, updateUser, deleteUser, searchUserName, uploadUserAvatar} = require('../Controllers/nguoiDungController');
+const {getUsers, createUser, getUserById, updateUser, deleteUser, searchUserName, uploadUserAvatar, paginationUser} = require('../Controllers/nguoiDungController');
 const upload = require("../Middlewares/upload");
 const {failToken} = require('../ultis/response');
 const {checkToken} = require('../Middlewares/auth')
 
+nguoiDungRoute.get('/users/phan-trang-tim-kiem', paginationUser);
 nguoiDungRoute.get('/users', getUsers);
 nguoiDungRoute.get('/users/:id', getUserById);
 nguoiDungRoute.get('/users/search/:userName', searchUserName);

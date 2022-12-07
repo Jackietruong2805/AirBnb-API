@@ -126,4 +126,26 @@ const uploadUserAvatar = async(req, res) =>{
     }
 }
 
-module.exports = {getUsers, createUser, getUserById, updateUser, deleteUser, searchUserName, uploadUserAvatar}
+const paginationUser = async (req, res) =>{
+    try{
+        const {pageIndex, pageSize, keyword} =  req.query;
+        const result = await prisma.NguoiDung.findMany({
+            skip: +pageSize*+pageIndex - +pageSize,
+            take: +pageSize,
+            where: {
+                name: {
+                    contains: keyword
+                }
+            }
+        })
+        if(result){
+            successCode(res, result, "Lấy thông tin người dùng thành công");
+        }else{
+            failCode(res, result, "Lấy thông tin người dùng thất bại");
+        }
+    }catch(err){
+        errorCode(res, err, "Lỗi backend");
+    }
+}
+
+module.exports = {getUsers, createUser, getUserById, updateUser, deleteUser, searchUserName, uploadUserAvatar, paginationUser}

@@ -1,9 +1,11 @@
 const express = require('express');
 const viTriRoute = express.Router();
-const {getviTri, createVitri, getVitriById, updateVitri, deleteVitri, uploadVitriImg} = require('../Controllers/viTriController');
+const {getviTri, createVitri, getVitriById, updateVitri, deleteVitri, uploadVitriImg, paginationviTri} = require('../Controllers/viTriController');
 const upload = require("../Middlewares/upload");
 const {failToken} = require('../ultis/response');
 const {checkToken} = require('../Middlewares/auth');
+
+viTriRoute.get('/vi-tri/phan-trang-tim-kiem', paginationviTri);
 
 viTriRoute.get('/vi-tri', getviTri);
 
@@ -51,5 +53,6 @@ viTriRoute.delete('/vi-tri/:id', (req, res, next) =>{
         failToken(res, "Token không hợp lệ !");
     }
 } ,deleteVitri);
+
 
 module.exports = viTriRoute;
