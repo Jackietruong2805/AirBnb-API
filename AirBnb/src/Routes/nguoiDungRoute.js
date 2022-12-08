@@ -23,6 +23,4 @@ nguoiDungRoute.post('/users', createUser);
 nguoiDungRoute.put('/users/:id', updateUser);
 nguoiDungRoute.delete('/users', deleteUser);
 
-
-
 module.exports = nguoiDungRoute; 
